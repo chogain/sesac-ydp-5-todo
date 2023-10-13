@@ -2,7 +2,6 @@ import { useState } from 'react';
 import Todo from './components/Todo';
 import './styles/App.css';
 import AddTodo from './components/AddTodo';
-
 function App() {
   const [todoItems, setTodoItems] = useState([
     {
@@ -33,27 +32,30 @@ function App() {
 
     // newItem id 키 값, done 키 값 넣기
     newItem.id = todoItems.length + 1;
-    newItem.done = false;
-
-    // todoItem 배열에 newItem을 추가
-    setTodoItems([...todoItems, newItem]);
+    const { id, title, done } = newItem;
+    // 투두 리스트에 새로운 투두를 추가
+    setTodoItems([
+      ...todoItems,
+      {
+        id,
+        title,
+        done,
+      },
+    ]);
   };
-
-  const deleteItem = (removeItem) => {
-    console.log(removeItem);
-
-    const newTodoItem = todoItems.filter((item) => item.id !== removeItem);
-    setTodoItems(newTodoItem);
+  // 투두 리스트에서 투두 삭제
+  const deleteItem = (item) => {
+    const newTodo = todoItems.filter((rowData) => rowData.id !== item.id);
+    setTodoItems(newTodo);
   };
-
   return (
     <div className='App'>
       <AddTodo addItem={addItem} />
-      {todoItems.map((item) => (
-        <Todo key={item.id} item={item} deleteItem={deleteItem} />
-      ))}
+      {/* todoItems 반복, props로 데이터(투두 객체)를 자식 컴포넌트에게 전달 */}
+      {todoItems.map((item) => {
+        return <Todo key={item.id} item={item} deleteItem={deleteItem} />;
+      })}
     </div>
   );
 }
-
 export default App;
